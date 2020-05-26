@@ -27,7 +27,6 @@ This RPM provides an HTTP server to fake PROPFIND responses
 # installation
 rm -rf %buildroot/
 mkdir -p %buildroot/usr/local/bin
-mkdir -p %buildroot/etc/blenderd
 mkdir -p %buildroot/usr/lib/systemd/system
 mkdir -p %buildroot/var/log/blenderd
 install -m 755 blenderd	     %buildroot/usr/local/bin/blenderd
@@ -42,7 +41,6 @@ rm -rf %buildroot/
 
 %files
 %defattr(-,root,root,-)
-/etc/blenderd
 /var/log/blenderd
 /usr/lib/systemd/system/blenderd.service
 /usr/local/bin/*
