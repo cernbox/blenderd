@@ -3,3 +3,4 @@ blenderd.*
 nohup.out
 releases
 rpmbuild
+blenderd-*
