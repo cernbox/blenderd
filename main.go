@@ -11,6 +11,8 @@ var port int
 
 func main() {
 	flag.IntVar(&port, "p", 6666, "listening port")
+	flag.Parse()
+
 	http.HandleFunc("/rooteosuser", rootEOSUser)
 	http.HandleFunc("/rooteosproject", rootEOSProject)
 	addr := fmt.Sprintf("%s:%d", "0.0.0.0", port)
@@ -28,6 +30,7 @@ func rootEOSProject(w http.ResponseWriter, r *http.Request) {
 func write(w http.ResponseWriter, r *http.Request, data string) {
 	if r.Method == "PROPFIND" {
 		w.Header().Set("Content-Type", "application/xml; charset=utf-8")
+		w.Header().Set("Content-Length", fmt.Sprintf("%d", len(data)))
 		w.WriteHeader(207)
 		if _, err := w.Write([]byte(data)); err != nil {
 			fmt.Fprintf(os.Stderr, "error writing propfind data: %+v", err)
