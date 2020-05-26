@@ -1,5 +1,12 @@
 # CERNBox Blender Daemon
 
+
+Run like:
+
+```
+$ blender
+```
+
 Exposes two endpoints:
 
 ```
