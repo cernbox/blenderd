@@ -1,0 +1,17 @@
+[Unit]
+Description=Blender daemon for CERNBox
+After=syslog.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/var/log/blenderd
+ExecStart=/usr/local/bin/blenderd
+StandardOutput=null
+StandardError=syslog
+LimitNOFILE=49152
+
+[Install]
+WantedBy=multi-user.target
+
