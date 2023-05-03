@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/gorilla/mux"
 	"net/http"
 	"os"
 )
@@ -13,8 +14,16 @@ func main() {
 	flag.IntVar(&port, "p", 6666, "listening port")
 	flag.Parse()
 
-	http.HandleFunc("/rooteosuser", rootEOSUser)
-	http.HandleFunc("/rooteosproject", rootEOSProject)
+	rtr := mux.NewRouter()
+	rtr.HandleFunc("/rootnew/{user:[a-zA-Z0-9]{2,20}}", rootNew)
+	rtr.HandleFunc("/rooteosnew/{user:[a-zA-Z0-9]{2,20}}", rootEOSNew)
+	rtr.HandleFunc("/rooteosusernew/{user:[a-zA-Z0-9]{2,20}}", rootEOSUserNew)
+	rtr.HandleFunc("/rooteosuser", rootEOSUser)
+	rtr.HandleFunc("/rooteosproject", rootEOSProject)
+	rtr.HandleFunc("/rooteosprojectnew/{user:[a-zA-Z0-9]{2,20}}", rootEOSProjectNew)
+
+	http.Handle("/", rtr)
+
 	addr := fmt.Sprintf("%s:%d", "0.0.0.0", port)
 	http.ListenAndServe(addr, nil)
 }
@@ -25,6 +34,110 @@ func rootEOSUser(w http.ResponseWriter, r *http.Request) {
 
 func rootEOSProject(w http.ResponseWriter, r *http.Request) {
 	write(w, r, projectData)
+}
+
+func rootNew(w http.ResponseWriter, r *http.Request) {
+	// extract headers
+	intro := `<d:multistatus xmlns:d="DAV:">`
+	outro := `</d:multistatus>`
+	txt := "<d:response><d:href>%s/%s</d:href><d:propstat><d:status>HTTP/1.1 200 OK</d:status><d:prop><d:resourcetype><d:collection/></d:resourcetype></d:prop></d:propstat><d:propstat><d:status>HTTP/1.1 404 Not Found</d:status><d:prop/></d:propstat></d:response>\n"
+
+	vars := mux.Vars(r)
+	user := vars["user"]
+
+	// abort if no user is supplied
+	if len(user) == 0 {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	prefix := fmt.Sprintf("/cernbox/desktop/remote.php/dav/files/%s", user)
+
+	// loop over letters to build list dynamically
+	for _, v := range []string{"home", "eos"} {
+		intro += fmt.Sprintf(txt, prefix, v)
+	}
+
+	intro += outro
+	write(w, r, intro)
+}
+
+func rootEOSNew(w http.ResponseWriter, r *http.Request) {
+	// extract headers
+	intro := `<d:multistatus xmlns:d="DAV:">`
+	outro := `</d:multistatus>`
+	txt := "<d:response><d:href>%s/eos/%s</d:href><d:propstat><d:status>HTTP/1.1 200 OK</d:status><d:prop><d:resourcetype><d:collection/></d:resourcetype></d:prop></d:propstat><d:propstat><d:status>HTTP/1.1 404 Not Found</d:status><d:prop/></d:propstat></d:response>\n"
+
+	vars := mux.Vars(r)
+	user := vars["user"]
+
+	// abort if no user is supplied
+	if len(user) == 0 {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	prefix := fmt.Sprintf("/cernbox/desktop/remote.php/dav/files/%s", user)
+
+	// loop over letters to build list dynamically
+	for _, v := range []string{"user", "project", "atlas", "media", "lhcb", "cms", "alice", "public", "experiment"} {
+		intro += fmt.Sprintf(txt, prefix, v)
+	}
+
+	intro += outro
+	write(w, r, intro)
+}
+
+func rootEOSProjectNew(w http.ResponseWriter, r *http.Request) {
+	// extract headers
+	intro := `<d:multistatus xmlns:d="DAV:">`
+	outro := `</d:multistatus>`
+	txt := "<d:response><d:href>%s/eos/project/%s</d:href><d:propstat><d:status>HTTP/1.1 200 OK</d:status><d:prop><d:resourcetype><d:collection/></d:resourcetype></d:prop></d:propstat><d:propstat><d:status>HTTP/1.1 404 Not Found</d:status><d:prop/></d:propstat></d:response>\n"
+
+	vars := mux.Vars(r)
+	user := vars["user"]
+
+	// abort if no user is supplied
+	if len(user) == 0 {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	prefix := fmt.Sprintf("/cernbox/desktop/remote.php/dav/files/%s", user)
+
+	// loop over letters to build list dynamically
+	for _, v := range []string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"} {
+		intro += fmt.Sprintf(txt, prefix, v)
+	}
+
+	intro += outro
+	write(w, r, intro)
+}
+
+func rootEOSUserNew(w http.ResponseWriter, r *http.Request) {
+	// extract headers
+	intro := `<d:multistatus xmlns:d="DAV:">`
+	outro := `</d:multistatus>`
+	txt := "<d:response><d:href>%s/eos/user/%s</d:href><d:propstat><d:status>HTTP/1.1 200 OK</d:status><d:prop><d:resourcetype><d:collection/></d:resourcetype></d:prop></d:propstat><d:propstat><d:status>HTTP/1.1 404 Not Found</d:status><d:prop/></d:propstat></d:response>\n"
+
+	vars := mux.Vars(r)
+	user := vars["user"]
+
+	// abort if no user is supplied
+	if len(user) == 0 {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	prefix := fmt.Sprintf("/cernbox/desktop/remote.php/dav/files/%s", user)
+
+	// loop over letters to build list dynamically
+	for _, v := range []string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"} {
+		intro += fmt.Sprintf(txt, prefix, v)
+	}
+
+	intro += outro
+	write(w, r, intro)
 }
 
 func write(w http.ResponseWriter, r *http.Request, data string) {
