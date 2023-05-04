@@ -4,7 +4,7 @@
 
 Name: blenderd
 Summary: Server to blend CERNBox to unforeseen realms
-Version: 1.0.0
+Version: 1.0.1
 Release: 1%{?dist}
 License: AGPLv3
 BuildRoot: %{_tmppath}/%{name}-buildroot
@@ -46,5 +46,7 @@ rm -rf %buildroot/
 /usr/local/bin/*
 
 %changelog
+* Wed May 4 2023 Hugo Gonzalez Labrador <hugo.gonzalez.labrador@cern.ch> 1.0.1
+- Support new dav files routes and propfind:root 
 * Tue May 26 2020 Hugo Gonzalez Labrador <hugo.gonzalez.labrador@cern.ch> 1.0.0
 - Init
