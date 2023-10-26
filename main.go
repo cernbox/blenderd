@@ -3,9 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/gorilla/mux"
 	"net/http"
 	"os"
+
+	"github.com/gorilla/mux"
 )
 
 var port int
@@ -80,7 +81,7 @@ func rootEOSNew(w http.ResponseWriter, r *http.Request) {
 	prefix := fmt.Sprintf("/cernbox/desktop/remote.php/dav/files/%s", user)
 
 	// loop over letters to build list dynamically
-	for _, v := range []string{"user", "project", "atlas", "media", "lhcb", "cms", "alice", "public", "experiment"} {
+	for _, v := range []string{"user", "project", "atlas", "media", "web", "lhcb", "cms", "alice", "public", "experiment"} {
 		intro += fmt.Sprintf(txt, prefix, v)
 	}
 
